@@ -1,0 +1,53 @@
+.todo-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #545454;
+  border-radius: 6px;
+  width: 100%;
+  margin: 0 auto 14px;
+  position: relative;
+}
+
+.todo-item--completed {
+  background: rgba(255, 255, 255, 0.21);
+  border-color: #545454;
+}
+
+.todo-check {
+  box-sizing: border-box;
+  cursor: pointer;
+  margin: 0 8px 0 0;
+}
+
+.todo-text {
+  color: black;
+  width: 100%;
+  text-align: left;
+}
+
+.todo-text--completed {
+  text-decoration: line-through;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.options-icon {
+  cursor: pointer;
+}
+
+.options-icon--delete:hover {
+  color: red;
+}
