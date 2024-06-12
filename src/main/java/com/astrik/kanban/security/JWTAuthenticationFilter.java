@@ -32,7 +32,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
 		try {
-			com.astrik.kanban.entity.User credentials = new ObjectMapper().readValue(request.getInputStream(), com.astrik.kanban.entity.User.class);
+			com.astrik.kanban.entity.user.User credentials = new ObjectMapper().readValue(request.getInputStream(), com.astrik.kanban.entity.user.User.class);
 
 			return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					credentials.getUsername(), credentials.getPassword(), new ArrayList<>()));

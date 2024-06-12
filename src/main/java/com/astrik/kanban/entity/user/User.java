@@ -1,5 +1,6 @@
-package com.astrik.kanban.entity;
+package com.astrik.kanban.entity.user;
 
+import com.astrik.kanban.entity.task.Task;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,17 +19,17 @@ public class User {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true, length = 50)
-    @NotBlank(message = "The username cannot be blank.", groups = UserValid.class)
+    @NotBlank(message = "The username cannot be blank.", groups = ValidUser.class)
     private String username;
 
     @Column(name = "password", nullable = false)
-    @NotBlank(message = "The password cannot be blank.", groups = UserValid.class)
+    @NotBlank(message = "The password cannot be blank.", groups = ValidUser.class)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @OneToMany(targetEntity = ToDo.class, mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Task.class, mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<ToDo> todos;
+    private List<Task> tasks;
 
     public User() {}
 
@@ -64,11 +65,11 @@ public class User {
         this.password = password;
     }
 
-    public List<ToDo> getTodos() {
-        return todos;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public void setTodos(List<ToDo> todos) {
-        this.todos = todos;
+    public void setTasks(List<Task> todos) {
+        this.tasks = todos;
     }
 }

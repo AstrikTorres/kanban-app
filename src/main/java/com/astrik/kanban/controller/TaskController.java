@@ -1,7 +1,9 @@
 package com.astrik.kanban.controller;
 
-import com.astrik.kanban.entity.*;
-import com.astrik.kanban.service.ToDoService;
+import com.astrik.kanban.entity.task.CreateTask;
+import com.astrik.kanban.entity.task.Task;
+import com.astrik.kanban.entity.task.UpdateTask;
+import com.astrik.kanban.service.TaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpStatus;
@@ -17,45 +19,45 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/todos")
 @Validated
-public class ToDoController {
+public class TaskController {
 
-    private ToDoService toDoService;
+    private TaskService toDoService;
 
-    public ToDoController(ToDoService toDoService) {
+    public TaskController(TaskService toDoService) {
         this.toDoService = toDoService;
     }
 
     @PostMapping("/default")
-    public ResponseEntity<List<ToDo>> createDefaultTodos() {
+    public ResponseEntity<List<Task>> createDefaultTodos() {
         return new ResponseEntity<>(toDoService.setTodosDefault(), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<ToDo>> getAllTodosByUserId() {
+    public ResponseEntity<List<Task>> getAllTodosByUserId() {
         return new ResponseEntity<>(toDoService.reedTodosByUser(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ToDo> createTodo(
-            @RequestBody @Validated(ToDoCreate.class) ToDo toDo) {
+    public ResponseEntity<Task> createTodo(
+            @RequestBody @Validated(CreateTask.class) Task toDo) {
         return new ResponseEntity<>(toDoService.saveTodo(toDo), HttpStatus.CREATED);
     }
 
     @PostMapping("/list")
-    public ResponseEntity<List<ToDo>> createTodoList(
-            @RequestBody List<ToDo> todosList) {
+    public ResponseEntity<List<Task>> createTodoList(
+            @RequestBody List<Task> todosList) {
         return new ResponseEntity<>(toDoService.saveTodoList(todosList), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<ToDo> putTodo(
-            @RequestBody @Validated(ToDoUpdate.class) ToDo toDo) {
+    public ResponseEntity<Task> putTodo(
+            @RequestBody @Validated(UpdateTask.class) Task toDo) {
         return new ResponseEntity<>(toDoService.updateTodo(toDo), HttpStatus.OK);
     }
 
     @PutMapping("/list")
-    public ResponseEntity<List<ToDo>> putTodoList(
-            @RequestBody List<ToDo> toDoList) {
+    public ResponseEntity<List<Task>> putTodoList(
+            @RequestBody List<Task> toDoList) {
         return new ResponseEntity<>(toDoService.updateTodoList(toDoList), HttpStatus.OK);
     }
 
@@ -75,7 +77,7 @@ public class ToDoController {
     }
 
     @DeleteMapping(path = "/list")
-    ResponseEntity<ObjectNode> deleteTodoList(@RequestBody List<ToDo> toDoList) {
+    ResponseEntity<ObjectNode> deleteTodoList(@RequestBody List<Task> toDoList) {
         String[] msg = {
                 "Deleted to do's",
                 "Try again - verify param"

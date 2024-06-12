@@ -2,8 +2,8 @@ package com.astrik.kanban.service;
 
 import org.springframework.stereotype.Service;
 
-import com.astrik.kanban.entity.ToDo;
-import com.astrik.kanban.entity.User;
+import com.astrik.kanban.entity.task.Task;
+import com.astrik.kanban.entity.user.User;
 import com.astrik.kanban.repository.ToDoRepository;
 
 import jakarta.transaction.Transactional;
@@ -13,50 +13,50 @@ import java.util.List;
 
 @Transactional
 @Service
-public class ToDoService {
+public class TaskService {
 
     ToDoRepository toDoRepository;
-    public ToDoService(ToDoRepository toDoRepository) {
+    public TaskService(ToDoRepository toDoRepository) {
         this.toDoRepository = toDoRepository;
     }
 
-    public List<ToDo> reedTodosByUser() {
+    public List<Task> reedTodosByUser() {
         return toDoRepository.findByUserId(UserDetailsServiceImpl.getAuthUser().getId());
     }
 
-    public List<ToDo> setTodosDefault() {
+    public List<Task> setTodosDefault() {
         User user = UserDetailsServiceImpl.getAuthUser();
-        ToDo toDo1 = new ToDo("Cortar cebolla", false, user);
-        ToDo toDo2 = new ToDo("Llorar con la llorona", true, user);
-        ToDo toDo3 = new ToDo("Hacer el curso de Spring Boot", true, user);
-        ToDo toDo4 = new ToDo("Hacer el curso de React", true, user);
+        Task toDo1 = new Task("Cortar cebolla", false, user);
+        Task toDo2 = new Task("Llorar con la llorona", true, user);
+        Task toDo3 = new Task("Hacer el curso de Spring Boot", true, user);
+        Task toDo4 = new Task("Hacer el curso de React", true, user);
 
-        List<ToDo> toDos = Arrays.asList(toDo1, toDo2, toDo3, toDo4);
-
-        toDoRepository.saveAll(toDos);
-        return toDos;
-    }
-
-    public List<ToDo> setTodosDefault(User user) {
-        ToDo toDo1 = new ToDo("Cortar cebolla", false, user);
-        ToDo toDo2 = new ToDo("Llorar con la llorona", true, user);
-        ToDo toDo3 = new ToDo("Hacer el curso de Spring Boot", true, user);
-        ToDo toDo4 = new ToDo("Hacer el curso de React", true, user);
-
-        List<ToDo> toDos = Arrays.asList(toDo1, toDo2, toDo3, toDo4);
+        List<Task> toDos = Arrays.asList(toDo1, toDo2, toDo3, toDo4);
 
         toDoRepository.saveAll(toDos);
         return toDos;
     }
 
-    public ToDo saveTodo(ToDo toDo) {
+    public List<Task> setTodosDefault(User user) {
+        Task toDo1 = new Task("Cortar cebolla", false, user);
+        Task toDo2 = new Task("Llorar con la llorona", true, user);
+        Task toDo3 = new Task("Hacer el curso de Spring Boot", true, user);
+        Task toDo4 = new Task("Hacer el curso de React", true, user);
+
+        List<Task> toDos = Arrays.asList(toDo1, toDo2, toDo3, toDo4);
+
+        toDoRepository.saveAll(toDos);
+        return toDos;
+    }
+
+    public Task saveTodo(Task toDo) {
         toDo.setUser(UserDetailsServiceImpl.getAuthUser());
         return toDoRepository.save(toDo);
     }
 
-    public List<ToDo> saveTodoList(List<ToDo> toDos) {
+    public List<Task> saveTodoList(List<Task> toDos) {
         User user = UserDetailsServiceImpl.getAuthUser();
-        List<ToDo> toDosSaved = new ArrayList<>();
+        List<Task> toDosSaved = new ArrayList<>();
         toDos.forEach(toDo -> {
             toDo.setUser(user);
             toDoRepository.save(toDo);
@@ -65,7 +65,7 @@ public class ToDoService {
         return toDosSaved;
     }
 
-    public ToDo updateTodo(ToDo toDo) {
+    public Task updateTodo(Task toDo) {
         User user = UserDetailsServiceImpl.getAuthUser();
         return toDoRepository.findByIdAndUserId(toDo.getId(), user.getId())
                 .map((item) -> {
@@ -74,9 +74,9 @@ public class ToDoService {
                 }).orElseThrow(() -> new RuntimeException("id not found"));
     }
 
-    public List<ToDo> updateTodoList(List<ToDo> toDos) throws RuntimeException {
+    public List<Task> updateTodoList(List<Task> toDos) throws RuntimeException {
         User user = UserDetailsServiceImpl.getAuthUser();
-        List<ToDo> toDosUpdated = new ArrayList<>();
+        List<Task> toDosUpdated = new ArrayList<>();
         toDos.forEach(toDo -> toDoRepository.findByIdAndUserId(toDo.getId(), user.getId())
                 .map((item) -> {
                     toDo.setUser(user);
@@ -97,7 +97,7 @@ public class ToDoService {
         }
     }
 
-    public boolean removeTodoList(List<ToDo> toDos) {
+    public boolean removeTodoList(List<Task> toDos) {
         User user = UserDetailsServiceImpl.getAuthUser();
         toDos.forEach(toDo -> toDoRepository.findByIdAndUserId(toDo.getId(), user.getId())
                 .map((t) -> {

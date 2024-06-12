@@ -1,5 +1,6 @@
-package com.astrik.kanban.entity;
+package com.astrik.kanban.entity.task;
 
+import com.astrik.kanban.entity.user.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
@@ -7,37 +8,37 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "todos")
-public class ToDo {
+@Table(name = "tasks")
+public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    @NotNull(message = "the id is needed to update", groups = ToDoUpdate.class)
+    @NotNull(message = "the id is needed to update", groups = UpdateTask.class)
     private Long id;
 
     @Column(name = "text", nullable = false)
-    @NotBlank(message = "The text cannot be blank.", groups = {ToDoCreate.class, ToDoUpdate.class})
+    @NotBlank(message = "The text cannot be blank.", groups = {CreateTask.class, UpdateTask.class})
     private String text;
 
     @Column(name = "completed", columnDefinition = "boolean default false")
-    @NotNull(message = "The completed property must have a boolean value.", groups = {ToDoCreate.class, ToDoUpdate.class})
+    @NotNull(message = "The completed property must have a boolean value.", groups = {CreateTask.class, UpdateTask.class})
     private Boolean completed;
 
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
-    public ToDo(String text, Boolean completed) {
+    public Task(String text, Boolean completed) {
         this.text = text;
         this.completed = completed;
     }
 
-    public ToDo() {
+    public Task() {
 
     }
 
-    public ToDo(String text, Boolean completed, User user) {
+    public Task(String text, Boolean completed, User user) {
         this.text = text;
         this.completed = completed;
         this.user = user;

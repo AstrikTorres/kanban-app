@@ -5,7 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.astrik.kanban.entity.User;
+import com.astrik.kanban.entity.user.User;
 import com.astrik.kanban.repository.UserRepository;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.astrik.kanban.controller;
 
-import com.astrik.kanban.entity.User;
-import com.astrik.kanban.entity.UserValid;
+import com.astrik.kanban.entity.user.User;
+import com.astrik.kanban.entity.user.ValidUser;
 import com.astrik.kanban.service.UserDetailsServiceImpl;
 import com.astrik.kanban.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +40,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(
-            @RequestBody @Validated(UserValid.class) User user) {
+            @RequestBody @Validated(ValidUser.class) User user) {
         User userCreated = userService.saveUser(user);
         return userCreated.getUsername() != user.getUsername()
                 ? new ResponseEntity<>(userCreated, HttpStatus.SEE_OTHER)
@@ -49,7 +49,7 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<Object> putUser(
-            @RequestBody @Validated(UserValid.class) User user) {
+            @RequestBody @Validated(ValidUser.class) User user) {
         User userUpdated = userService.updateUser(user);
         return userUpdated.getUsername() != user.getUsername()
                 ? new ResponseEntity<>(userUpdated, HttpStatus.BAD_REQUEST)

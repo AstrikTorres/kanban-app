@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.astrik.kanban.entity.User;
+import com.astrik.kanban.entity.user.User;
 import com.astrik.kanban.repository.UserRepository;
 
 import static java.util.Collections.emptyList;
