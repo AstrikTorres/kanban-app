@@ -1,6 +1,7 @@
 package com.astrik.kanban.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class UserService {
         if (userRepository.existsByUsername(user.getUsername()))
             return new User("this user is already registered");
         else {
-            User userToUpdate = UserDetailsServiceImpl.getAuthUser();
+            User userToUpdate = this.getAuthUser();
             userToUpdate.setUsername(user.getUsername());
             userToUpdate.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             return userRepository.save(userToUpdate);
@@ -46,11 +47,17 @@ public class UserService {
     }
 
     public boolean removeUser() {
-        User userToDelete = UserDetailsServiceImpl.getAuthUser();
+        User userToDelete = this.getAuthUser();
         if (userToDelete != null) {
             userRepository.delete(userToDelete);
             return !userRepository.existsById(userToDelete.getId());
-        } else return false;
+        } else
+            return false;
+    }
+    
+    public User getAuthUser() {
+        return userRepository.findByUsername(
+                (String) (SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
     }
 
 }

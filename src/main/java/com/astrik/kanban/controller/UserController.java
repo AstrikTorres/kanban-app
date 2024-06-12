@@ -2,10 +2,11 @@ package com.astrik.kanban.controller;
 
 import com.astrik.kanban.entity.user.User;
 import com.astrik.kanban.entity.user.ValidUser;
-import com.astrik.kanban.service.UserDetailsServiceImpl;
 import com.astrik.kanban.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,13 +21,11 @@ import java.util.List;
 @Validated
 public class UserController {
 
+    @Autowired
     private UserService userService;
-    private ObjectMapper objectMapper;
 
-    public UserController(UserService userService, ObjectMapper objectMapper) {
-        this.userService = userService;
-        this.objectMapper = objectMapper;
-    }
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
@@ -35,7 +34,7 @@ public class UserController {
 
     @GetMapping("/auth")
     public ResponseEntity<User> getAuthUser() {
-        return new ResponseEntity<>(UserDetailsServiceImpl.getAuthUser(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAuthUser(), HttpStatus.OK);
     }
 
     @PostMapping

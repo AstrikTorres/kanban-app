@@ -1,10 +1,12 @@
 package com.astrik.kanban.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.astrik.kanban.entity.task.Task;
 import com.astrik.kanban.entity.user.User;
 import com.astrik.kanban.repository.ToDoRepository;
+import com.astrik.kanban.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
@@ -15,17 +17,18 @@ import java.util.List;
 @Service
 public class TaskService {
 
-    ToDoRepository toDoRepository;
-    public TaskService(ToDoRepository toDoRepository) {
-        this.toDoRepository = toDoRepository;
-    }
+    @Autowired
+    private ToDoRepository toDoRepository;
+
+    @Autowired
+    private UserService userService;
 
     public List<Task> reedTodosByUser() {
-        return toDoRepository.findByUserId(UserDetailsServiceImpl.getAuthUser().getId());
+        return toDoRepository.findByUserId(userService.getAuthUser().getId());
     }
 
     public List<Task> setTodosDefault() {
-        User user = UserDetailsServiceImpl.getAuthUser();
+        User user = userService.getAuthUser();
         Task toDo1 = new Task("Cortar cebolla", false, user);
         Task toDo2 = new Task("Llorar con la llorona", true, user);
         Task toDo3 = new Task("Hacer el curso de Spring Boot", true, user);
@@ -50,12 +53,12 @@ public class TaskService {
     }
 
     public Task saveTodo(Task toDo) {
-        toDo.setUser(UserDetailsServiceImpl.getAuthUser());
+        toDo.setUser(userService.getAuthUser());
         return toDoRepository.save(toDo);
     }
 
     public List<Task> saveTodoList(List<Task> toDos) {
-        User user = UserDetailsServiceImpl.getAuthUser();
+        User user = userService.getAuthUser();
         List<Task> toDosSaved = new ArrayList<>();
         toDos.forEach(toDo -> {
             toDo.setUser(user);
@@ -66,7 +69,7 @@ public class TaskService {
     }
 
     public Task updateTodo(Task toDo) {
-        User user = UserDetailsServiceImpl.getAuthUser();
+        User user = userService.getAuthUser();
         return toDoRepository.findByIdAndUserId(toDo.getId(), user.getId())
                 .map((item) -> {
                     toDo.setUser(user);
@@ -75,7 +78,7 @@ public class TaskService {
     }
 
     public List<Task> updateTodoList(List<Task> toDos) throws RuntimeException {
-        User user = UserDetailsServiceImpl.getAuthUser();
+        User user = userService.getAuthUser();
         List<Task> toDosUpdated = new ArrayList<>();
         toDos.forEach(toDo -> toDoRepository.findByIdAndUserId(toDo.getId(), user.getId())
                 .map((item) -> {
@@ -87,7 +90,7 @@ public class TaskService {
     }
 
     public boolean removeTodo(Long id) {
-        User user = UserDetailsServiceImpl.getAuthUser();
+        User user = userService.getAuthUser();
         if (!toDoRepository.existsByIdAndUserId(id, user.getId())) return false;
         try {
             toDoRepository.deleteByIdAndUserId(id, user.getId());
@@ -98,7 +101,7 @@ public class TaskService {
     }
 
     public boolean removeTodoList(List<Task> toDos) {
-        User user = UserDetailsServiceImpl.getAuthUser();
+        User user = userService.getAuthUser();
         toDos.forEach(toDo -> toDoRepository.findByIdAndUserId(toDo.getId(), user.getId())
                 .map((t) -> {
                     toDoRepository.deleteByIdAndUserId(toDo.getId(), user.getId());
