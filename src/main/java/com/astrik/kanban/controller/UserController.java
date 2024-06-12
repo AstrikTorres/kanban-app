@@ -12,9 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")

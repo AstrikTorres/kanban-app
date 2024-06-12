@@ -3,9 +3,8 @@ package com.astrik.kanban.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity

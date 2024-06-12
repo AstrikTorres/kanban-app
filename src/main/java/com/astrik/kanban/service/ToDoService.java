@@ -6,7 +6,7 @@ import com.astrik.kanban.entity.ToDo;
 import com.astrik.kanban.entity.User;
 import com.astrik.kanban.repository.ToDoRepository;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
